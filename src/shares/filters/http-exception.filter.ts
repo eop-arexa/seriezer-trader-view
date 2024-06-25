@@ -1,0 +1,48 @@
+import {
+  ArgumentsHost,
+  BadRequestException,
+  Catch,
+  ExceptionFilter,
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+  InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { Response } from 'express';
+
+@Catch()
+export class HttpExceptionFilter implements ExceptionFilter {
+  catch(exception: HttpException, host: ArgumentsHost) {
+    const context = host.switchToHttp();
+    const response = context.getResponse<Response>();
+    const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
+    const error =
+      exception instanceof HttpException
+        ? exception.getResponse()
+        : filterExceptionByStatus(status, exception['message']);
+
+    response.status(status).json({
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      error,
+    });
+  }
+}
+
+function filterExceptionByStatus(status: number, exception): HttpException {
+  switch (status) {
+    case HttpStatus.BAD_REQUEST:
+      return new BadRequestException(exception);
+    case HttpStatus.UNAUTHORIZED:
+      return new UnauthorizedException(exception);
+    case HttpStatus.FORBIDDEN:
+      return new ForbiddenException(exception);
+    case HttpStatus.NOT_FOUND:
+      return new NotFoundException(exception);
+
+    default:
+      return new InternalServerErrorException(exception);
+  }
+}

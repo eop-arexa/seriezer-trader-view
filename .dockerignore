@@ -1,0 +1,7 @@
+node_modules
+.dockerignore
+.gitignore
+Makefile
+.env*
+.vscode
+dist

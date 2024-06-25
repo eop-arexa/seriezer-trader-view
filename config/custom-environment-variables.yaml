@@ -1,0 +1,42 @@
+app:
+  env: APP_ENV
+  name: APP_NAME
+  port: APP_PORT
+  host: APP_HOST
+  url: APP_URL
+  brandName: APP_BRAND_NAME
+  brandUrl: APP_BRAND_URL
+throttle:
+  ttl: THROTTLE_TTL
+  limit: THROTTLE_LIMIT
+queue:
+  job:
+    attempts: QUEUE_JOB_ATTEMPTS
+    removeOnComplete:
+      __name: QUEUE_JOB_REMOVE_ON_COMPLETE
+      __format: json
+    removeOnFail:
+      __name: QUEUE_JOB_REMOVE_ON_FAIL
+      __format: json
+auth:
+  jwt:
+    secretKey: AUTH_JWT_SECRET_KEY
+    expireTime: AUTH_JWT_EXPIRY
+  refreshToken:
+    secretKey: AUTH_REFRESH_TOKEN_SECRET_KEY
+    expireTime: AUTH_REFRESH_TOKEN_EXPIRY
+  verifyToken:
+    secretKet: AUTH_VERIFY_TOKEN_SECRET_KEY
+    expireTime: AUTH_VERIFY_TOKEN_EXPIRY
+logger:
+  level: LOGGER_LEVEL
+  useFile:
+    __name: LOGGER_USE_FILE
+    __format: json
+redis:
+  host: REDIS_HOST
+  port: REDIS_PORT
+  username: REDIS_USER_NAME
+  password: REDIS_PASSWORD
+mongodb:
+  uri: MONGODB_URI
