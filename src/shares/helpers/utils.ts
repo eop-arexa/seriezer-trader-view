@@ -267,4 +267,4 @@ export function createMongooseOptions(uri: string): MongooseModuleOptions {
 
 export const isStringTooLong = (msg: string, capacity = 4999) => {
   return msg.length > capacity;
-}
+};

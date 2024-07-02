@@ -34,3 +34,25 @@ redis:
   password: redis_pw
 mongodb:
   uri: mongodb://127.0.0.1:27017/nest-base
+  debug: false
+nats:
+  host: 206.189.146.23
+  port: 42222
+tokenPairs:
+  - ETHUSDT
+  - BNBUSDT
+  - BTCUSDT
+  - SOLUSDT
+  - RUNEUSDT
+  - NEARUSDT
+  - MATICUSDT
+  - AVAXUSDT
+  - ARBUSDT
+
+
+
+
+
+
+
+

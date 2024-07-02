@@ -1,18 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { BaseRepository } from '../../shares/mongoose/base-repository';
-import { UserDocument } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { DBCollectionName } from '../database/database.const';
 import { Model } from 'mongoose';
+import { CandleDocument } from './candles.schema';
 
 @Injectable()
-export class UserRepository extends BaseRepository<UserDocument> {
+export class CandlesRepository extends BaseRepository<CandleDocument> {
   constructor(
-    @InjectModel(DBCollectionName.User)
-    model: Model<UserDocument>,
+    @InjectModel(DBCollectionName.Candle)
+    model: Model<CandleDocument>,
   ) {
-    super(model, {
-      isSupportSoftDeleted: true,
-    });
+    super(model);
   }
 }
