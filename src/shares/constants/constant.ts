@@ -25,3 +25,20 @@ export interface BufferedFile {
   size: number;
   buffer: Buffer;
 }
+
+export enum TokenPair {
+  ETHUSDT = 'ETHUSDT',
+  BNBUSDT = 'BNBUSDT',
+  BTCUSDT = 'BTCUSDT',
+  SOLUSDT = 'SOLUSDT',
+  RUNEUSDT = 'RUNEUSDT',
+  NEARUSDT = 'NEARUSDT',
+  MATICUSDT = 'MATICUSDT',
+  AVAXUSDT = 'AVAXUSDT',
+  ARBUSDT = 'ARBUSDT',
+}
+
+export enum MicroserviceEvent {
+  CANDLE_LATEST_ALL = `CANDLE.LATEST.ALL`,
+  INDICATOR_LATEST_ALL = `INDICATOR.LATEST.ALL`,
+}

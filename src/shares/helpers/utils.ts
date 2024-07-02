@@ -8,6 +8,8 @@ import moment from 'moment-timezone';
 import { exec } from 'child_process';
 import config from 'config';
 import { MongooseModuleOptions } from '@nestjs/mongoose';
+import { DBCollectionName } from '../../modules/database/database.const';
+import { TokenPair } from '../constants/constant';
 
 export async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -267,4 +269,7 @@ export function createMongooseOptions(uri: string): MongooseModuleOptions {
 
 export const isStringTooLong = (msg: string, capacity = 4999) => {
   return msg.length > capacity;
-}
+};
+
+export const generateCollectionName = (tokenPair: TokenPair, collectionName: DBCollectionName) =>
+  `${tokenPair}_${collectionName}`;

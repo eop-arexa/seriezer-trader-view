@@ -1,3 +1,4 @@
 export enum DBCollectionName {
-  User = 'user',
+  Indicator = 'indicators',
+  Candles = 'candles',
 }
