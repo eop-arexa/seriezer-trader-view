@@ -41,4 +41,5 @@ export enum TokenPair {
 export enum MicroserviceEvent {
   CANDLE_LATEST_ALL = `CANDLE.LATEST.ALL`,
   INDICATOR_LATEST_ALL = `INDICATOR.LATEST.ALL`,
+  CANDLE_INDEX = `CANDLE.INDEX`,
 }

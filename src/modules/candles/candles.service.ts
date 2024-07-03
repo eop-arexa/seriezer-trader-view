@@ -6,6 +6,7 @@ import { MicroserviceEvent, TokenPair } from '../../shares/constants/constant';
 import { CandleInterval } from './candles.constant';
 import { ClientProxy } from '@nestjs/microservices';
 import { SERIEZER_TRADER_VIEW_INJECT_TOKEN } from '../nats-client/nats-client.module';
+import { IndexCandleRequestDto } from './candles.dto';
 
 const config = getConfig();
 const tokenPairs: TokenPair[] = config.get<TokenPair[]>('tokenPairs');
@@ -29,6 +30,28 @@ export class CandlesService {
     this.sendLatestCandleByInterval(CandleInterval.min1440);
   }
 
+  async indexCandle(indexCandleFilter: IndexCandleRequestDto) {
+    return this.candleRepository.find(
+      indexCandleFilter.symbol,
+      {
+        start: {
+          $gte: indexCandleFilter.startTime,
+        },
+        ...(indexCandleFilter.endTime && {
+          end: {
+            $lte: indexCandleFilter.endTime,
+          },
+        }),
+        interval: indexCandleFilter.interval,
+      },
+      {
+        sort: {
+          start: 1,
+        },
+      },
+    );
+  }
+
   async sendLatestCandleByInterval(interval: CandleInterval) {
     const logger = this.logger;
     while (true) {
@@ -37,6 +60,11 @@ export class CandlesService {
           tokenPairs.map((pair) => this.candleRepository.latestByInterval(pair, interval)),
         );
         this.natsClient.emit(MicroserviceEvent.CANDLE_LATEST_ALL, latestCandles).subscribe({
+          next: async () => {
+            logger.log(
+              `CandlesService::sendLatestIndicatorByCode() | Emit event ${MicroserviceEvent.CANDLE_LATEST_ALL} - ${interval}`,
+            );
+          },
           error(e) {
             logger.error(
               `CandlesService::sendLatestCandleByInterval() | Emit event ${MicroserviceEvent.CANDLE_LATEST_ALL} error: ${e.message}`,

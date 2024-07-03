@@ -36,4 +36,8 @@ export class CandlesRepository {
       })
       .exec();
   }
+
+  find(symbol: TokenPair, condition: Record<any, any>, option: Record<any, any>) {
+    return this.models.get(symbol).find(condition, null, option).exec();
+  }
 }
