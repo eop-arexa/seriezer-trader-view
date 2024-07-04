@@ -33,6 +33,7 @@ export class CandlesRepository {
         sort: {
           start: -1,
         },
+        lean: true,
       })
       .exec();
   }

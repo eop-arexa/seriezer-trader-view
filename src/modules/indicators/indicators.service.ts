@@ -20,7 +20,7 @@ export class IndicatorsService {
   ) {}
 
   sendLatestIndicator() {
-    IndicatorCodes.map((indicatorCode) => this.sendLatestIndicatorByCode(indicatorCode));
+    IndicatorCodes.forEach((indicatorCode) => this.sendLatestIndicatorByCode(indicatorCode));
   }
 
   async indexIndicator(indexIndicatorFilter: IndexIndicatorRequestDto) {
@@ -30,13 +30,11 @@ export class IndicatorsService {
         start: {
           $gte: indexIndicatorFilter.startTime,
         },
-        ...(indexIndicatorFilter.endTime && {
-          end: {
-            $lte: indexIndicatorFilter.endTime,
-          },
-        }),
+        end: {
+          $lte: indexIndicatorFilter.endTime,
+        },
         interval: indexIndicatorFilter.interval,
-        type: { $ne: IndicatorType.FREQ },
+        type: indexIndicatorFilter.type,
       },
       {
         lean: true,
@@ -55,11 +53,9 @@ export class IndicatorsService {
         start: {
           $gte: indexFREQIndicatorFilter.startTime,
         },
-        ...(indexFREQIndicatorFilter.endTime && {
-          end: {
-            $lte: indexFREQIndicatorFilter.endTime,
-          },
-        }),
+        end: {
+          $lte: indexFREQIndicatorFilter.endTime,
+        },
         type: IndicatorType.FREQ,
       },
       {
@@ -67,6 +63,7 @@ export class IndicatorsService {
         sort: {
           start: 1,
         },
+        limit: config.get<number>('response.limit'),
       },
     );
   }

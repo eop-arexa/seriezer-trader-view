@@ -6,14 +6,14 @@ export class IndexCandleRequestDto {
   @IsNotEmpty()
   startTime: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   endTime?: string;
 
   @IsEnum(CandleInterval)
   @IsNotEmpty()
-  interval?: CandleInterval = CandleInterval.min1;
+  interval: CandleInterval;
 
   @IsEnum(TokenPair)
   @IsNotEmpty()
-  symbol?: TokenPair;
+  symbol: TokenPair;
 }

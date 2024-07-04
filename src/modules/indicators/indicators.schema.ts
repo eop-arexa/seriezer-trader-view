@@ -59,6 +59,5 @@ export class Indicator<T extends IndicatorType.DEMA | IndicatorType.MAGIC | Indi
 
 export const IndicatorsSchema = SchemaFactory.createForClass(Indicator);
 IndicatorsSchema.index({ code: 1, start: -1 });
-IndicatorsSchema.index({ interval: 1, start: -1, end: -1 });
 IndicatorsSchema.index({ type: 1, start: -1, end: -1 });
-IndicatorsSchema.index({ interval: 1, start: 1, type: 1 });
+IndicatorsSchema.index({ type: 1, interval: 1, start: -1, end: -1 });

@@ -5,7 +5,6 @@ import { Connection, Model, QueryOptions } from 'mongoose';
 import { IndicatorDocument, IndicatorsSchema } from './indicators.schema';
 import { generateCollectionName, getConfig } from '../../shares/helpers/utils';
 import { TokenPair } from '../../shares/constants/constant';
-import { CandleInterval } from '../candles/candles.constant';
 
 const config = getConfig();
 
@@ -33,6 +32,7 @@ export class IndicatorsRepository {
         sort: {
           start: -1,
         },
+        lean: true,
       })
       .exec();
   }

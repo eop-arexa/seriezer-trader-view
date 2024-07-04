@@ -1,6 +1,5 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { ConfigService } from './config.service';
-import { CacheService } from './cache.service';
 import { WinstonModule } from 'nest-winston';
 import { createTransports, enumerateErrorFormat, timestamp } from '../../shares/helpers/logger';
 import winston from 'winston';
@@ -12,7 +11,7 @@ export class CoreModule {
   static register(): DynamicModule {
     return {
       module: CoreModule,
-      providers: [ConfigService, CacheService, PaginationHeaderHelper],
+      providers: [ConfigService, PaginationHeaderHelper],
       imports: [
         WinstonModule.forRootAsync({
           useFactory: async (configService: ConfigService) => {
@@ -30,7 +29,7 @@ export class CoreModule {
           inject: [ConfigService],
         }),
       ],
-      exports: [ConfigService, CacheService, PaginationHeaderHelper],
+      exports: [ConfigService, PaginationHeaderHelper],
     };
   }
 }

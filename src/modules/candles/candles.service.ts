@@ -37,11 +37,9 @@ export class CandlesService {
         start: {
           $gte: indexCandleFilter.startTime,
         },
-        ...(indexCandleFilter.endTime && {
-          end: {
-            $lte: indexCandleFilter.endTime,
-          },
-        }),
+        end: {
+          $lte: indexCandleFilter.endTime,
+        },
         interval: indexCandleFilter.interval,
       },
       {

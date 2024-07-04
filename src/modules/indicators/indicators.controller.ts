@@ -1,11 +1,10 @@
-import { Controller, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { IndicatorsService } from './indicators.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MicroserviceEvent } from '../../shares/constants/constant';
 import { IndexFREQIndicatorRequestDto, IndexIndicatorRequestDto } from './indicators.dto';
 import { CompressResponse } from '../../shares/decorators/compress-response.decorator';
 
-@UsePipes(ValidationPipe)
 @Controller()
 export class IndicatorsController {
   constructor(private readonly indicatorsService: IndicatorsService) {}
