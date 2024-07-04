@@ -5,7 +5,8 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { MicroserviceEvent, TokenPair } from '../../shares/constants/constant';
 import { getConfig, sleep } from '../../shares/helpers/utils';
 import { IndicatorsRepository } from './indicators.repository';
-import { IndicatorCodes } from './indicators.constant';
+import { IndicatorCodes, IndicatorType } from './indicators.constant';
+import { IndexFREQIndicatorRequestDto, IndexIndicatorRequestDto } from './indicators.dto';
 
 const config = getConfig();
 const tokenPairs: TokenPair[] = config.get<TokenPair[]>('tokenPairs');
@@ -19,7 +20,55 @@ export class IndicatorsService {
   ) {}
 
   sendLatestIndicator() {
-    IndicatorCodes.forEach((indicatorCode) => this.sendLatestIndicatorByCode(indicatorCode));
+    IndicatorCodes.map((indicatorCode) => this.sendLatestIndicatorByCode(indicatorCode));
+  }
+
+  async indexIndicator(indexIndicatorFilter: IndexIndicatorRequestDto) {
+    return this.indicatorRepository.find(
+      indexIndicatorFilter.symbol,
+      {
+        start: {
+          $gte: indexIndicatorFilter.startTime,
+        },
+        ...(indexIndicatorFilter.endTime && {
+          end: {
+            $lte: indexIndicatorFilter.endTime,
+          },
+        }),
+        interval: indexIndicatorFilter.interval,
+        type: { $ne: IndicatorType.FREQ },
+      },
+      {
+        lean: true,
+        sort: {
+          start: 1,
+        },
+        limit: config.get<number>('response.limit'),
+      },
+    );
+  }
+
+  async indexFREQIndicator(indexFREQIndicatorFilter: IndexFREQIndicatorRequestDto) {
+    return this.indicatorRepository.find(
+      indexFREQIndicatorFilter.symbol,
+      {
+        start: {
+          $gte: indexFREQIndicatorFilter.startTime,
+        },
+        ...(indexFREQIndicatorFilter.endTime && {
+          end: {
+            $lte: indexFREQIndicatorFilter.endTime,
+          },
+        }),
+        type: IndicatorType.FREQ,
+      },
+      {
+        lean: true,
+        sort: {
+          start: 1,
+        },
+      },
+    );
   }
 
   async sendLatestIndicatorByCode(code: string) {
@@ -30,16 +79,21 @@ export class IndicatorsService {
           tokenPairs.map((pair) => this.indicatorRepository.latestByCode(pair, code)),
         );
         this.natsClient.emit(MicroserviceEvent.INDICATOR_LATEST_ALL, latestIndicators).subscribe({
+          next: async () => {
+            logger.log(
+              `IndicatorsService::sendLatestIndicatorByCode() | Emit event ${MicroserviceEvent.INDICATOR_LATEST_ALL} - ${code}`,
+            );
+          },
           error(e) {
             logger.error(
-              `CandlesService::sendLatestIndicatorByCode() | Emit event ${MicroserviceEvent.INDICATOR_LATEST_ALL} error: ${e.message}`,
+              `IndicatorsService::sendLatestIndicatorByCode() | Emit event ${MicroserviceEvent.INDICATOR_LATEST_ALL} error: ${e.message}`,
               e,
             );
           },
         });
         await sleep(Number(config.get('interval.refresh')));
       } catch (e) {
-        this.logger.log(`CandlesService::sendLatestIndicatorByCode() | error: ${e.message}`, e);
+        this.logger.log(`IndicatorsService::sendLatestIndicatorByCode() | error: ${e.message}`, e);
         await sleep(Number(config.get<number>('interval.sleepTime')));
       }
     }

@@ -45,6 +45,7 @@ export class CandlesService {
         interval: indexCandleFilter.interval,
       },
       {
+        lean: true,
         sort: {
           start: 1,
         },
@@ -62,7 +63,7 @@ export class CandlesService {
         this.natsClient.emit(MicroserviceEvent.CANDLE_LATEST_ALL, latestCandles).subscribe({
           next: async () => {
             logger.log(
-              `CandlesService::sendLatestIndicatorByCode() | Emit event ${MicroserviceEvent.CANDLE_LATEST_ALL} - ${interval}`,
+              `CandlesService::sendLatestCandleByInterval() | Emit event ${MicroserviceEvent.CANDLE_LATEST_ALL} - ${interval}`,
             );
           },
           error(e) {

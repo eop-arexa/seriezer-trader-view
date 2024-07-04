@@ -7,6 +7,7 @@ import { generateCollectionName, getConfig } from '../../shares/helpers/utils';
 import { TokenPair } from '../../shares/constants/constant';
 import { IndicatorsSchema } from '../indicators/indicators.schema';
 import { NatsClientModule } from '../nats-client/nats-client.module';
+import { CandlesController } from './candles.controller';
 const config = getConfig();
 
 const tokenPairs = config.get<TokenPair[]>('tokenPairs');
@@ -22,5 +23,6 @@ const tokenPairs = config.get<TokenPair[]>('tokenPairs');
   ],
   providers: [CandlesService, CandlesRepository],
   exports: [CandlesService, CandlesRepository],
+  controllers: [CandlesController],
 })
 export class CandlesModule {}

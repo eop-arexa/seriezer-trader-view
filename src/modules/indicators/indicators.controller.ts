@@ -1,7 +1,24 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UsePipes, ValidationPipe } from '@nestjs/common';
 import { IndicatorsService } from './indicators.service';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { MicroserviceEvent } from '../../shares/constants/constant';
+import { IndexFREQIndicatorRequestDto, IndexIndicatorRequestDto } from './indicators.dto';
+import { CompressResponse } from '../../shares/decorators/compress-response.decorator';
 
+@UsePipes(ValidationPipe)
 @Controller()
 export class IndicatorsController {
   constructor(private readonly indicatorsService: IndicatorsService) {}
+
+  @CompressResponse()
+  @MessagePattern(MicroserviceEvent.INDICATOR_INDEX)
+  indexIndicator(@Payload() indexIndicatorFilter: IndexIndicatorRequestDto) {
+    return this.indicatorsService.indexIndicator(indexIndicatorFilter);
+  }
+
+  @CompressResponse()
+  @MessagePattern(MicroserviceEvent.INDICATOR_FREQ_INDEX)
+  indexFREQ(@Payload() indexFREQIndicatorFilter: IndexFREQIndicatorRequestDto) {
+    return this.indicatorsService.indexFREQIndicator(indexFREQIndicatorFilter);
+  }
 }

@@ -50,5 +50,7 @@ tokenPairs:
   - AVAXUSDT
   - ARBUSDT
 interval:
-  refresh: 1000
+  refresh: 60000
   sleepTime: 10000
+response:
+  limit: 100

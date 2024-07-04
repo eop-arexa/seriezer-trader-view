@@ -54,6 +54,4 @@ export class Candle {
 }
 
 export const CandlesSchema = SchemaFactory.createForClass(Candle);
-CandlesSchema.index({ start: 1, interval: 1 }, { unique: true });
-CandlesSchema.index({ end: 1, interval: 1 }, { unique: true });
 CandlesSchema.index({ interval: 1, start: -1 });

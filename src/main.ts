@@ -1,5 +1,5 @@
 import { config as dotenvConfig } from 'dotenv';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -8,6 +8,7 @@ import { getConfig } from './shares/helpers/utils';
 import { AllExceptionsFilter } from './shares/filters/exception.filter';
 import { CandlesService } from './modules/candles/candles.service';
 import { IndicatorsService } from './modules/indicators/indicators.service';
+import { MicroserviceInterceptor } from './shares/interceptors/microservice.interceptor';
 
 dotenvConfig();
 const config = getConfig();
@@ -22,8 +23,10 @@ async function bootstrap() {
   const logger = app.get(WINSTON_MODULE_NEST_PROVIDER);
   app.useLogger(logger);
 
+  const reflector = app.get(Reflector);
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new AllExceptionsFilter(logger));
+  app.useGlobalInterceptors(new MicroserviceInterceptor(logger, reflector));
   await app.listen();
   logger.log(`Seriezer Trader View is running PID: ${process.pid}`);
 

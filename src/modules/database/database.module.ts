@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { createMongooseOptions } from '../../shares/helpers/utils';
+import { createMongooseOptions, getConfig } from '../../shares/helpers/utils';
 import { ConfigService } from '../core/config.service';
+import mongoose from 'mongoose';
+const config = getConfig();
+mongoose.set('debug', config.get('mongodb.debug'));
 
 @Module({
   imports: [

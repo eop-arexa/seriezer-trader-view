@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { DBCollectionName } from '../database/database.const';
-import { Connection, Model } from 'mongoose';
+import { Connection, Model, QueryOptions } from 'mongoose';
 import { generateCollectionName, getConfig } from '../../shares/helpers/utils';
 import { TokenPair } from '../../shares/constants/constant';
 import { CandleInterval } from './candles.constant';
@@ -37,7 +37,7 @@ export class CandlesRepository {
       .exec();
   }
 
-  find(symbol: TokenPair, condition: Record<any, any>, option: Record<any, any>) {
+  find(symbol: TokenPair, condition: Record<any, any>, option: QueryOptions) {
     return this.models.get(symbol).find(condition, null, option).exec();
   }
 }
