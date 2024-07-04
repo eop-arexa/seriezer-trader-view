@@ -49,6 +49,7 @@ export class CandlesService {
         sort: {
           start: 1,
         },
+        limit: config.get<number>('response.limit'),
       },
     );
   }

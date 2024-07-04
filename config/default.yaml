@@ -1,29 +1,6 @@
 app:
   env: development
-  name: "nest-be-template"
-  port: 3001
-  host: localhost
-  url: http://localhost:3001
-  brandName: "nest-be-template"
-  brandUrl: https://nest-be-template.example
-throttle:
-  ttl: 60
-  limit: 10
-queue:
-  job:
-    attempts: 10
-    removeOnComplete: true
-    removeOnFail: false
-auth:
-  jwt:
-    secretKey: secret
-    expireTime: 7d
-  refreshToken:
-    secretKey: secret
-    expireTime: 7d
-  verifyToken:
-    secretKet: secret
-    expireTime: 1d
+  name: "seriezer-trader-view"
 logger:
   level: info
   useFile: false
@@ -34,7 +11,7 @@ redis:
   password: redis_pw
 mongodb:
   uri: mongodb://127.0.0.1:27017/nest-base
-  debug: true
+  debug: false
 nats:
   host: 206.189.146.23
   port: 42222
@@ -53,4 +30,4 @@ interval:
   refresh: 60000
   sleepTime: 10000
 response:
-  limit: 100
+  limit: 300

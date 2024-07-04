@@ -1,33 +1,6 @@
 app:
   env: APP_ENV
   name: APP_NAME
-  port: APP_PORT
-  host: APP_HOST
-  url: APP_URL
-  brandName: APP_BRAND_NAME
-  brandUrl: APP_BRAND_URL
-throttle:
-  ttl: THROTTLE_TTL
-  limit: THROTTLE_LIMIT
-queue:
-  job:
-    attempts: QUEUE_JOB_ATTEMPTS
-    removeOnComplete:
-      __name: QUEUE_JOB_REMOVE_ON_COMPLETE
-      __format: json
-    removeOnFail:
-      __name: QUEUE_JOB_REMOVE_ON_FAIL
-      __format: json
-auth:
-  jwt:
-    secretKey: AUTH_JWT_SECRET_KEY
-    expireTime: AUTH_JWT_EXPIRY
-  refreshToken:
-    secretKey: AUTH_REFRESH_TOKEN_SECRET_KEY
-    expireTime: AUTH_REFRESH_TOKEN_EXPIRY
-  verifyToken:
-    secretKet: AUTH_VERIFY_TOKEN_SECRET_KEY
-    expireTime: AUTH_VERIFY_TOKEN_EXPIRY
 logger:
   level: LOGGER_LEVEL
   useFile:
@@ -40,3 +13,11 @@ redis:
   password: REDIS_PASSWORD
 mongodb:
   uri: MONGODB_URI
+nats:
+  host: NATS_HOST
+  port: NATS_PORT
+interval:
+  refresh: INTERVAL_REFRESH
+  sleepTime: INTERVAL_SLEEP_TIME
+response:
+  limit: RESPONSE_LIMIT
