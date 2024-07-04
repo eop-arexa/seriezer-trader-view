@@ -13,8 +13,8 @@ mongodb:
   uri: mongodb://127.0.0.1:27017/nest-base
   debug: true
 nats:
-  host: 206.189.146.23
-  port: 42222
+  host: 127.0.0.1
+  port: 4222
 tokenPairs:
   - ETHUSDT
   - BNBUSDT
