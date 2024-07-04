@@ -1,4 +1,4 @@
-export APP_NAME = tridentity
+export APP_NAME = arexa-trader-view
 
 pm2-start:
 	yarn build && pm2 start ecosystem.config.js --env production
