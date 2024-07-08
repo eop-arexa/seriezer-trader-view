@@ -33,6 +33,18 @@ export class IndicatorsRepository {
           start: -1,
         },
         lean: true,
+        projection: {
+          symbol: 1,
+          interval: 1,
+          start: 1,
+          end: 1,
+          type: 1,
+          code: 1,
+          value: 1,
+          valuePrediction: 1,
+          calcDetail: 1,
+          id: 1,
+        },
       })
       .exec();
   }
