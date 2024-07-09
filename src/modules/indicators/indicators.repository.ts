@@ -49,7 +49,7 @@ export class IndicatorsRepository {
       .exec();
   }
 
-  find(symbol: TokenPair, condition: Record<any, any>, option: QueryOptions) {
-    return this.models.get(symbol).find(condition, null, option).exec();
+  find(symbol: TokenPair, condition: Record<any, any>, projection: object, option: QueryOptions) {
+    return this.models.get(symbol).find(condition, projection, option).exec();
   }
 }

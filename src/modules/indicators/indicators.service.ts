@@ -37,6 +37,18 @@ export class IndicatorsService {
         type: indexIndicatorFilter.type,
       },
       {
+        symbol: 1,
+        interval: 1,
+        start: 1,
+        end: 1,
+        type: 1,
+        code: 1,
+        value: 1,
+        valuePrediction: 1,
+        calcDetail: 1,
+        id: 1,
+      },
+      {
         lean: true,
         sort: {
           start: 1,
@@ -57,6 +69,18 @@ export class IndicatorsService {
           $lte: indexFREQIndicatorFilter.endTime,
         },
         type: IndicatorType.FREQ,
+      },
+      {
+        symbol: 1,
+        interval: 1,
+        start: 1,
+        end: 1,
+        type: 1,
+        code: 1,
+        value: 1,
+        valuePrediction: 1,
+        calcDetail: 1,
+        id: 1,
       },
       {
         lean: true,
