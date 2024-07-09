@@ -5,7 +5,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { MicroserviceEvent, TokenPair } from '../../shares/constants/constant';
 import { getConfig, sleep } from '../../shares/helpers/utils';
 import { IndicatorsRepository } from './indicators.repository';
-import { IndicatorCodes, IndicatorType } from './indicators.constant';
+import { IndicatorCalcDetail, IndicatorCodes, IndicatorType } from './indicators.constant';
 import { IndexFREQIndicatorRequestDto, IndexIndicatorRequestDto } from './indicators.dto';
 
 const config = getConfig();
@@ -24,7 +24,7 @@ export class IndicatorsService {
   }
 
   async indexIndicator(indexIndicatorFilter: IndexIndicatorRequestDto) {
-    return this.indicatorRepository.find(
+    const queryResult = await this.indicatorRepository.find(
       indexIndicatorFilter.symbol,
       {
         start: {
@@ -56,10 +56,15 @@ export class IndicatorsService {
         limit: config.get<number>('response.limit'),
       },
     );
+
+    return queryResult.map((doc) => {
+      delete doc?.calcDetail['nweValues'];
+      return doc;
+    });
   }
 
   async indexFREQIndicator(indexFREQIndicatorFilter: IndexFREQIndicatorRequestDto) {
-    return this.indicatorRepository.find(
+    const queryResult = await this.indicatorRepository.find(
       indexFREQIndicatorFilter.symbol,
       {
         start: {
@@ -90,6 +95,11 @@ export class IndicatorsService {
         limit: config.get<number>('response.limit'),
       },
     );
+
+    return queryResult.map((doc) => {
+      delete doc?.calcDetail['nweValues'];
+      return doc;
+    });
   }
 
   async sendLatestIndicatorByCode(code: string) {

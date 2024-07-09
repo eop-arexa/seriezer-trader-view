@@ -25,8 +25,8 @@ export class IndicatorsRepository {
     );
   }
 
-  latestByCode(symbol: TokenPair, code: string) {
-    return this.models
+  async latestByCode(symbol: TokenPair, code: string) {
+    const result = await this.models
       .get(symbol)
       .findOne({ code }, null, {
         sort: {
@@ -47,6 +47,9 @@ export class IndicatorsRepository {
         },
       })
       .exec();
+
+    delete result?.calcDetail['nweValues'];
+    return result;
   }
 
   find(symbol: TokenPair, condition: Record<any, any>, projection: object, option: QueryOptions) {
