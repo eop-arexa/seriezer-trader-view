@@ -6,9 +6,6 @@ export class IndexCandleRequestDto {
   @IsNotEmpty()
   startTime: string;
 
-  @IsNotEmpty()
-  endTime?: string;
-
   @IsEnum(CandleInterval)
   @IsNotEmpty()
   interval: CandleInterval;

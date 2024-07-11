@@ -30,9 +30,6 @@ export class IndicatorsService {
         start: {
           $gte: indexIndicatorFilter.startTime,
         },
-        end: {
-          $lte: indexIndicatorFilter.endTime,
-        },
         interval: indexIndicatorFilter.interval,
         type: indexIndicatorFilter.type,
       },
@@ -69,9 +66,6 @@ export class IndicatorsService {
       {
         start: {
           $gte: indexFREQIndicatorFilter.startTime,
-        },
-        end: {
-          $lte: indexFREQIndicatorFilter.endTime,
         },
         type: IndicatorType.FREQ,
       },
