@@ -59,7 +59,7 @@ export class IndicatorsService {
         return doc;
       }
       delete doc?.calcDetail['nweValues'];
-      delete doc?.valuePrediction;
+      doc['valuePrediction'] = [];
       return doc;
     });
   }
