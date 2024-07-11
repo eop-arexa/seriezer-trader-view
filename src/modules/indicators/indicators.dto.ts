@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { CandleInterval } from '../candles/candles.constant';
 import { TokenPair } from '../../shares/constants/constant';
 import { IndicatorType } from './indicators.constant';
@@ -9,7 +9,7 @@ export class IndexIndicatorRequestDto {
 
   @IsEnum(CandleInterval)
   @IsNotEmpty()
-  interval?: CandleInterval = CandleInterval.min1;
+  interval: CandleInterval = CandleInterval.min1;
 
   @IsEnum(TokenPair)
   @IsNotEmpty()
@@ -26,4 +26,8 @@ export class IndexFREQIndicatorRequestDto {
   @IsEnum(TokenPair)
   @IsNotEmpty()
   symbol?: TokenPair;
+
+  @IsEnum(CandleInterval)
+  @IsOptional()
+  interval?: CandleInterval;
 }

@@ -5,7 +5,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { MicroserviceEvent, TokenPair } from '../../shares/constants/constant';
 import { getConfig, sleep } from '../../shares/helpers/utils';
 import { IndicatorsRepository } from './indicators.repository';
-import { IndicatorCalcDetail, IndicatorCodes, IndicatorType } from './indicators.constant';
+import { IndicatorCodes, IndicatorType } from './indicators.constant';
 import { IndexFREQIndicatorRequestDto, IndexIndicatorRequestDto } from './indicators.dto';
 
 const config = getConfig();
@@ -54,8 +54,12 @@ export class IndicatorsService {
       },
     );
 
-    return queryResult.map((doc) => {
+    return queryResult.map((doc, index) => {
+      if (index + 1 === queryResult.length) {
+        return doc;
+      }
       delete doc?.calcDetail['nweValues'];
+      delete doc?.valuePrediction;
       return doc;
     });
   }
@@ -67,6 +71,9 @@ export class IndicatorsService {
         start: {
           $gte: indexFREQIndicatorFilter.startTime,
         },
+        ...(indexFREQIndicatorFilter.interval && {
+          interval: indexFREQIndicatorFilter.interval,
+        }),
         type: IndicatorType.FREQ,
       },
       {
@@ -78,7 +85,6 @@ export class IndicatorsService {
         code: 1,
         value: 1,
         valuePrediction: 1,
-        calcDetail: 1,
         id: 1,
       },
       {
@@ -90,8 +96,11 @@ export class IndicatorsService {
       },
     );
 
-    return queryResult.map((doc) => {
-      delete doc?.calcDetail['nweValues'];
+    return queryResult.map((doc, index) => {
+      if (index + 1 === queryResult.length) {
+        return doc;
+      }
+      delete doc?.valuePrediction;
       return doc;
     });
   }
