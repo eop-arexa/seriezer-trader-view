@@ -7,9 +7,6 @@ export class IndexIndicatorRequestDto {
   @IsNotEmpty()
   startTime: string;
 
-  @IsNotEmpty()
-  endTime: string;
-
   @IsEnum(CandleInterval)
   @IsNotEmpty()
   interval?: CandleInterval = CandleInterval.min1;
@@ -25,9 +22,6 @@ export class IndexIndicatorRequestDto {
 export class IndexFREQIndicatorRequestDto {
   @IsNotEmpty()
   startTime: string;
-
-  @IsNotEmpty()
-  endTime?: string;
 
   @IsEnum(TokenPair)
   @IsNotEmpty()
