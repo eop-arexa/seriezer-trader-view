@@ -102,7 +102,7 @@ export class IndicatorsService {
       if (index + 1 === queryResult.length) {
         return doc;
       }
-      delete doc?.valuePrediction;
+      doc.valuePrediction = [];
       return doc;
     });
   }
