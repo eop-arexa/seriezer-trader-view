@@ -4,11 +4,11 @@ import { CoreModule } from './modules/core/core.module';
 import { AllExceptionsFilter } from './shares/filters/exception.filter';
 import { QueuesModule } from './modules/queue/queue.module';
 import { DatabaseModule } from './modules/database/database.module';
-import { IndicatorsModule } from './modules/indicators/indicators.module';
-import { CandlesModule } from './modules/candles/candles.module';
+import { CandlesNotifierModule } from './modules/candles/candles.notifier.module';
+import { IndicatorsNotifierModule } from './modules/indicators/indicators.notifier.module';
 
 @Module({
-  imports: [CoreModule.register(), DatabaseModule, QueuesModule, IndicatorsModule, CandlesModule],
+  imports: [CoreModule.register(), DatabaseModule, QueuesModule, CandlesNotifierModule, IndicatorsNotifierModule],
   providers: [
     {
       provide: APP_FILTER,
@@ -16,4 +16,4 @@ import { CandlesModule } from './modules/candles/candles.module';
     },
   ],
 })
-export class AppModule {}
+export class AppNotifierModule {}
