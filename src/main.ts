@@ -1,4 +1,6 @@
 import { config as dotenvConfig } from 'dotenv';
+dotenvConfig();
+
 import { NestFactory, Reflector } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from './app.module';
@@ -8,7 +10,6 @@ import { getConfig } from './shares/helpers/utils';
 import { AllExceptionsFilter } from './shares/filters/exception.filter';
 import { MicroserviceInterceptor } from './shares/interceptors/microservice.interceptor';
 
-dotenvConfig();
 const config = getConfig();
 
 async function bootstrap() {

@@ -1,4 +1,6 @@
 import { config as dotenvConfig } from 'dotenv';
+dotenvConfig();
+
 import { NestFactory, Reflector } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
@@ -9,7 +11,6 @@ import { IndicatorsService } from './modules/indicators/indicators.service';
 import { MicroserviceInterceptor } from './shares/interceptors/microservice.interceptor';
 import { AppNotifierModule } from './app.notifier.module';
 
-dotenvConfig();
 const config = getConfig();
 
 async function bootstrap() {
