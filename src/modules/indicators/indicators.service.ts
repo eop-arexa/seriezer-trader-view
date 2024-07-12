@@ -24,6 +24,7 @@ export class IndicatorsService {
   }
 
   async indexIndicator(indexIndicatorFilter: IndexIndicatorRequestDto) {
+    this.logger.log(`IndicatorsService::indexIndicator incoming request`);
     const queryResult = await this.indicatorRepository.find(
       indexIndicatorFilter.symbol,
       {
