@@ -140,23 +140,23 @@ export class IndicatorsService {
   private getIntervalNumberMinute(interval: CandleInterval): number {
     switch (interval) {
       case CandleInterval.min1:
-        return 1;
+        return 60000;
       case CandleInterval.min5:
-        return 5;
+        return 5 * 60000;
       case CandleInterval.min15:
-        return 15;
+        return 15 * 60000;
       case CandleInterval.min30:
-        return 30;
+        return 30 * 60000;
       case CandleInterval.min60:
-        return 60;
+        return 60 * 60000;
       case CandleInterval.min240:
-        return 240;
+        return 240 * 60000;
       case CandleInterval.min720:
-        return 720;
+        return 720 * 60000;
       case CandleInterval.min1440:
-        return 1440;
+        return 1440 * 60000;
       default:
-        return 1;
+        return 60000;
     }
   }
 }
