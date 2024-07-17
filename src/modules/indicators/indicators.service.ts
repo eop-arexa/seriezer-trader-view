@@ -78,9 +78,6 @@ export class IndicatorsService {
             $mod: [this.getIntervalNumberMinute(indexFREQIndicatorFilter.interval), 0],
           }),
         },
-        ...(indexFREQIndicatorFilter.interval && {
-          interval: indexFREQIndicatorFilter.interval,
-        }),
         type: IndicatorType.FREQ,
       },
       {
