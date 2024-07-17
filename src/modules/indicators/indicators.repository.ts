@@ -5,6 +5,7 @@ import { Connection, Model, QueryOptions } from 'mongoose';
 import { IndicatorDocument, IndicatorsSchema } from './indicators.schema';
 import { generateCollectionName, getConfig } from '../../shares/helpers/utils';
 import { TokenPair } from '../../shares/constants/constant';
+import { FreqIndicatorCodes } from './indicators.constant';
 
 const config = getConfig();
 
@@ -25,15 +26,12 @@ export class IndicatorsRepository {
     );
   }
 
-  async latestByCode(symbol: TokenPair, code: string) {
+  async latestByCode(symbol: TokenPair, code: string, intervalMinutes: number) {
     const result = await this.models
       .get(symbol)
-      .findOne({ code }, null, {
-        sort: {
-          start: -1,
-        },
-        lean: true,
-        projection: {
+      .findOne(
+        { code, ...(FreqIndicatorCodes.includes(code) && { start: { $mod: [intervalMinutes, 0] } }) },
+        {
           symbol: 1,
           interval: 1,
           start: 1,
@@ -45,7 +43,13 @@ export class IndicatorsRepository {
           calcDetail: 1,
           id: 1,
         },
-      })
+        {
+          sort: {
+            start: -1,
+          },
+          lean: true,
+        },
+      )
       .exec();
 
     delete result?.calcDetail['nweValues'];

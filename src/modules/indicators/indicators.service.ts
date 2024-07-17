@@ -21,7 +21,9 @@ export class IndicatorsService {
   ) {}
 
   sendLatestIndicator() {
-    IndicatorCodes.forEach((indicatorCode) => this.sendLatestIndicatorByCode(indicatorCode));
+    IndicatorCodes.forEach((indicatorCode) =>
+      this.sendLatestIndicatorByCode(indicatorCode.code, indicatorCode.intervalMinutes),
+    );
   }
 
   async indexIndicator(indexIndicatorFilter: IndexIndicatorRequestDto) {
@@ -109,12 +111,12 @@ export class IndicatorsService {
     });
   }
 
-  async sendLatestIndicatorByCode(code: string) {
+  async sendLatestIndicatorByCode(code: string, intervalMinutes: number) {
     const logger = this.logger;
     while (true) {
       try {
         const latestIndicators = await Promise.all(
-          tokenPairs.map((pair) => this.indicatorRepository.latestByCode(pair, code)),
+          tokenPairs.map((pair) => this.indicatorRepository.latestByCode(pair, code, intervalMinutes)),
         );
         this.natsClient.emit(MicroserviceEvent.INDICATOR_LATEST_ALL, latestIndicators).subscribe({
           next: async () => {
