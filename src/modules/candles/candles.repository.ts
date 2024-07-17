@@ -29,16 +29,53 @@ export class CandlesRepository {
   latestByInterval(symbol: TokenPair, interval: CandleInterval) {
     return this.models
       .get(symbol)
-      .findOne({ interval }, null, {
-        sort: {
-          start: -1,
+      .findOne(
+        { interval },
+        {
+          id: 1,
+          start: 1,
+          end: 1,
+          lastEnd: 1,
+          op: 1,
+          hi: 1,
+          lo: 1,
+          cl: 1,
+          bv: 1,
+          cnt: 1,
+          tbc: 1,
+          tqv: 1,
         },
-        lean: true,
-      })
+        {
+          sort: {
+            start: -1,
+          },
+          lean: true,
+        },
+      )
       .exec();
   }
 
   find(symbol: TokenPair, condition: Record<any, any>, option: QueryOptions) {
-    return this.models.get(symbol).find(condition, null, option).exec();
+    return this.models
+      .get(symbol)
+      .find(
+        condition,
+        {
+          id: 1,
+          start: 1,
+          end: 1,
+          lastEnd: 1,
+          op: 1,
+          hi: 1,
+          lo: 1,
+          cl: 1,
+          bv: 1,
+          cnt: 1,
+          tbc: 1,
+          tqv: 1,
+        },
+        option,
+      )
+      .exec();
   }
 }

@@ -1,25 +1,27 @@
 import { CandleInterval } from '../candles/candles.constant';
 
 export const IndicatorCodes = [
-  'FREQ-Base',
-  'FREQ-5min',
-  'FREQ-15min',
-  'DEMA-1a',
-  'DEMA-1b',
-  'DEMA-2a',
-  'DEMA-2b',
-  'DEMA-3a',
-  'DEMA-3b',
-  'NWE-15min',
-  'MAGIC-15min',
-  'FREQ-30min',
-  'FREQ-60min',
-  'NWE-60min',
-  'MAGIC-60min',
-  'FREQ-240min',
-  'DEMA-4a',
-  'DEMA-4b',
+  { code: 'FREQ-Base', intervalMinutes: 60000 },
+  { code: 'FREQ-5min', intervalMinutes: 300000 },
+  { code: 'FREQ-15min', intervalMinutes: 900000 },
+  { code: 'DEMA-1a', intervalMinutes: 900000 },
+  { code: 'DEMA-1b', intervalMinutes: 900000 },
+  { code: 'DEMA-2a', intervalMinutes: 900000 },
+  { code: 'DEMA-2b', intervalMinutes: 900000 },
+  { code: 'DEMA-3a', intervalMinutes: 900000 },
+  { code: 'DEMA-3b', intervalMinutes: 900000 },
+  { code: 'NWE-15min', intervalMinutes: 900000 },
+  { code: 'MAGIC-15min', intervalMinutes: 900000 },
+  { code: 'FREQ-30min', intervalMinutes: 1800000 },
+  { code: 'FREQ-60min', intervalMinutes: 3600000 },
+  { code: 'NWE-60min', intervalMinutes: 3600000 },
+  { code: 'MAGIC-60min', intervalMinutes: 3600000 },
+  { code: 'FREQ-240min', intervalMinutes: 14400000 },
+  { code: 'DEMA-4a', intervalMinutes: 14400000 },
+  { code: 'DEMA-4b', intervalMinutes: 14400000 },
 ];
+
+export const FreqIndicatorCodes = ['FREQ-Base', 'FREQ-5min', 'FREQ-15min', 'FREQ-30min', 'FREQ-60min', 'FREQ-240min'];
 
 export enum IndicatorType {
   DEMA = 'DEMA', // DEMAs
