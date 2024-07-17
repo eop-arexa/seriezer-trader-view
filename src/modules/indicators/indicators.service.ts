@@ -7,6 +7,7 @@ import { getConfig, sleep } from '../../shares/helpers/utils';
 import { IndicatorsRepository } from './indicators.repository';
 import { IndicatorCodes, IndicatorType } from './indicators.constant';
 import { IndexFREQIndicatorRequestDto, IndexIndicatorRequestDto } from './indicators.dto';
+import { CandleInterval } from '../candles/candles.constant';
 
 const config = getConfig();
 const tokenPairs: TokenPair[] = config.get<TokenPair[]>('tokenPairs');
@@ -73,6 +74,9 @@ export class IndicatorsService {
         start: {
           $gte: indexFREQIndicatorFilter.startTime,
           $lte: indexFREQIndicatorFilter.endTime,
+          ...(indexFREQIndicatorFilter.interval && {
+            $mod: [this.getIntervalNumberMinute(indexFREQIndicatorFilter.interval), 0],
+          }),
         },
         ...(indexFREQIndicatorFilter.interval && {
           interval: indexFREQIndicatorFilter.interval,
@@ -133,6 +137,29 @@ export class IndicatorsService {
         this.logger.log(`IndicatorsService::sendLatestIndicatorByCode() | error: ${e.message}`, e);
         await sleep(Number(config.get<number>('interval.sleepTime')));
       }
+    }
+  }
+
+  private getIntervalNumberMinute(interval: CandleInterval): number {
+    switch (interval) {
+      case CandleInterval.min1:
+        return 1;
+      case CandleInterval.min5:
+        return 5;
+      case CandleInterval.min15:
+        return 15;
+      case CandleInterval.min30:
+        return 30;
+      case CandleInterval.min60:
+        return 60;
+      case CandleInterval.min240:
+        return 240;
+      case CandleInterval.min720:
+        return 720;
+      case CandleInterval.min1440:
+        return 1440;
+      default:
+        return 1;
     }
   }
 }
