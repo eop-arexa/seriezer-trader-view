@@ -39,7 +39,6 @@ export class IndicatorsService {
         type: indexIndicatorFilter.type,
       },
       {
-        symbol: 1,
         interval: 1,
         start: 1,
         end: 1,
@@ -83,7 +82,6 @@ export class IndicatorsService {
         type: IndicatorType.FREQ,
       },
       {
-        symbol: 1,
         interval: 1,
         start: 1,
         end: 1,
