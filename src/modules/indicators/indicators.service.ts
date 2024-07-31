@@ -58,14 +58,34 @@ export class IndicatorsService {
       },
     );
 
-    return queryResult.map((doc, index) => {
-      if (index + 1 === queryResult.length) {
-        return doc;
-      }
-      delete doc?.calcDetail['nweValues'];
-      doc['valuePrediction'] = [];
-      return doc;
-    });
+    const indicatorCodes: string[] = [];
+    try {
+      const filteredData = queryResult.reduce((prev, curr) => {
+        if (!indicatorCodes.includes(curr.code)) {
+          prev[curr.code] = [curr];
+          indicatorCodes.push(curr.code);
+          return prev;
+        }
+        prev[curr.code].push(curr);
+        return prev;
+      }, {});
+
+      return Object.values(filteredData).reduce((prev: any[], curr: any[]) => {
+        prev.push(
+          ...curr.map((item, index) => {
+            if (index + 1 === curr.length) {
+              return item;
+            }
+            delete item?.calcDetail['nweValues'];
+            item['valuePrediction'] = [];
+            return item;
+          }),
+        );
+        return prev;
+      }, []);
+    } catch (e) {
+      this.logger.error(`IndicatorService::indexIndicator: ${e}`);
+    }
   }
 
   async indexFREQIndicator(indexFREQIndicatorFilter: IndexFREQIndicatorRequestDto) {
