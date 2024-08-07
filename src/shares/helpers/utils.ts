@@ -10,6 +10,7 @@ import config from 'config';
 import { MongooseModuleOptions } from '@nestjs/mongoose';
 import { DBCollectionName } from '../../modules/database/database.const';
 import { TokenPair } from '../constants/constant';
+import { CandleInterval } from '../../modules/candles/candles.constant';
 
 export async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -264,6 +265,7 @@ export const getConfig = () => {
 export function createMongooseOptions(uri: string): MongooseModuleOptions {
   return {
     uri,
+    compressors: ['zstd'],
   };
 }
 
@@ -273,3 +275,41 @@ export const isStringTooLong = (msg: string, capacity = 4999) => {
 
 export const generateCollectionName = (tokenPair: TokenPair, collectionName: DBCollectionName) =>
   `${tokenPair}_${collectionName}`;
+
+export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
+  return Object.keys(obj).filter((k) => !Number.isNaN(k)) as K[];
+}
+
+export function getMinute(interval: CandleInterval): number {
+  switch (interval) {
+    case CandleInterval.min1:
+      return 1;
+    case CandleInterval.min5:
+      return 5;
+    case CandleInterval.min15:
+      return 15;
+    case CandleInterval.min30:
+      return 30;
+    case CandleInterval.min60:
+      return 60;
+    case CandleInterval.min240:
+      return 240;
+    case CandleInterval.min720:
+      return 720;
+    case CandleInterval.min1440:
+      return 1440;
+  }
+}
+
+export function calcIntervalStart(date: number, interval: CandleInterval): number {
+  const min = getMinute(interval) * 60 * 1000;
+  return Math.floor(date / min) * min;
+}
+
+export function addInterval(date: number, interval: CandleInterval): number {
+  return new Date(date + getMinute(interval) * 60 * 1000).getTime();
+}
+
+export function calcIntervalEnd(date: number, interval: CandleInterval): number {
+  return addInterval(date, interval) - 1;
+}

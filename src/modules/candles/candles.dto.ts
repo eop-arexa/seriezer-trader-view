@@ -7,7 +7,7 @@ export class IndexCandleRequestDto {
   startTime: string;
 
   @IsNotEmpty()
-  endTime?: string;
+  endTime: string;
 
   @IsEnum(CandleInterval)
   @IsNotEmpty()

@@ -5,7 +5,7 @@ import { Timestamp } from 'bson';
 
 export type CandleDocument = Candle & Document;
 
-@Schema({ timestamps: true, autoIndex: true })
+@Schema({ timestamps: true, autoIndex: false })
 export class Candle {
   @Prop()
   id: string;

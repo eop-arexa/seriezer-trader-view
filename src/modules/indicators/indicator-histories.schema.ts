@@ -1,36 +1,28 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { IndicatorCalcDetail, IndicatorType } from './indicators.constant';
 import { Timestamp } from 'bson';
-import { CandleInterval } from '../candles/candles.constant';
-import { IIndicatorBase, IndicatorCalcDetail, IndicatorType } from './indicators.constant';
 
-export type IndicatorDocument = Indicator<IndicatorType> & Document;
+export type IndicatorHistoryDocument = IndicatorHistory<IndicatorType> & Document;
 
 @Schema({ timestamps: true, autoIndex: false })
-export class Indicator<T extends IndicatorType.DEMA | IndicatorType.MAGIC | IndicatorType.NWE | IndicatorType.FREQ> {
+export class IndicatorHistory<
+  T extends IndicatorType.DEMA | IndicatorType.MAGIC | IndicatorType.NWE | IndicatorType.FREQ,
+> {
   @Prop()
   id: string;
-
-  @Prop({ required: true })
-  symbol: string;
-
-  @Prop({ enum: CandleInterval })
-  interval: CandleInterval;
 
   @Prop({ type: Timestamp })
   start: number;
 
-  @Prop({ type: Timestamp })
-  end: number;
-
-  @Prop({ enum: IndicatorType })
-  type: IndicatorType;
-
   @Prop({ type: String })
   code: string;
 
-  @Prop({ type: Object })
-  prevData: IIndicatorBase<IndicatorCalcDetail<T>>[];
+  @Prop({ type: String })
+  type: string;
+
+  @Prop({ type: String, unique: true, required: true })
+  uniqueId: string;
 
   @Prop({ type: Number })
   order: number;
@@ -57,7 +49,6 @@ export class Indicator<T extends IndicatorType.DEMA | IndicatorType.MAGIC | Indi
   valuePrediction: (number | null)[]; // [ value + d1Prediction[0], valuePrediction[0] + d1Prediction[1], ... ]
 }
 
-export const IndicatorsSchema = SchemaFactory.createForClass(Indicator);
-IndicatorsSchema.index({ code: 1, start: -1 });
-IndicatorsSchema.index({ type: 1, start: -1, end: -1 });
-IndicatorsSchema.index({ type: 1, interval: 1, start: -1, end: -1 });
+export const IndicatorHistoriesSchema = SchemaFactory.createForClass(IndicatorHistory);
+IndicatorHistoriesSchema.index({ start: 1, code: 1, order: -1 });
+IndicatorHistoriesSchema.index({ type: 1, start: -1 });

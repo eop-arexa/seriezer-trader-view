@@ -22,6 +22,26 @@ export class IndexIndicatorRequestDto {
   type: IndicatorType;
 }
 
+export class IndexIndicatorV2RequestDto {
+  @IsNotEmpty()
+  startTime: string;
+
+  @IsNotEmpty()
+  endTime: string;
+
+  @IsEnum(CandleInterval)
+  @IsNotEmpty()
+  interval: CandleInterval = CandleInterval.min1;
+
+  @IsEnum(TokenPair)
+  @IsNotEmpty()
+  symbol: TokenPair;
+
+  @IsNotEmpty()
+  @IsEnum(IndicatorType)
+  type: IndicatorType;
+}
+
 export class IndexFREQIndicatorRequestDto {
   @IsNotEmpty()
   startTime: string;
