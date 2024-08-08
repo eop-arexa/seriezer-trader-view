@@ -1,4 +1,4 @@
-import { Inject, Injectable, LoggerService, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { SERIEZER_TRADER_VIEW_INJECT_TOKEN } from '../nats-client/nats-client.module';
 import { ClientProxy } from '@nestjs/microservices';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
@@ -139,6 +139,7 @@ export class IndicatorsService {
         valuePrediction: 1,
         calcDetail: {
           isSignal: 1,
+          ...(indexIndicatorFilter.type === IndicatorType.NWE && { lower: 1, upper: 1 }),
         },
       },
       {
@@ -172,6 +173,7 @@ export class IndicatorsService {
         uniqueId: 1,
         calcDetail: {
           isSignal: 1,
+          ...(indexIndicatorFilter.type === IndicatorType.NWE && { lower: 1, upper: 1 }),
         },
         value: 1,
         valuePrediction: 1,
@@ -212,6 +214,8 @@ export class IndicatorsService {
       code: string;
       isSignal: number;
       value: (number | null)[];
+      lower?: (number | null)[];
+      upper?: (number | null)[];
       // if it has prediction it will have multiple numbers. The index of the item inside the array shows how far from the present
     }[] = [];
 
@@ -239,6 +243,7 @@ export class IndicatorsService {
         indicatorDef.interval,
         interval,
         indicatorDef.predictionParam.showOldprediction,
+        indexIndicatorFilter.type,
       );
       // tslint:disable-next-line:prefer-for-of
       for (let k = 0; k < adjustedIndicator.length; k++) {
@@ -248,6 +253,10 @@ export class IndicatorsService {
           code: indicatorDef.code,
           isSignal: adjustedIndicatorItem.isSignal,
           value: adjustedIndicatorItem.value,
+          ...(indexIndicatorFilter.type === IndicatorType.NWE && {
+            upper: adjustedIndicatorItem.upper,
+            lower: adjustedIndicatorItem.lower,
+          }),
         });
       }
     }
@@ -274,6 +283,10 @@ export class IndicatorsService {
           code: indicator.code,
           isSignal: indicator.isSignal,
           value: indicator.value,
+          ...(indexIndicatorFilter.type === IndicatorType.NWE && {
+            upper: indicator.upper,
+            lower: indicator.lower,
+          }),
         });
       }
       minCandleIndex = Math.min(minCandleIndex, indicator.candleIndex);

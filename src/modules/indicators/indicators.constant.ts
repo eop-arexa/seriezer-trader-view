@@ -693,6 +693,8 @@ export interface IAdjustedTimeFrameIndicator {
       code: string;
       isSignal: number;
       value: (number | null)[];
+      upper?: (number | null)[];
+      lower?: (number | null)[];
     }[];
   }[];
 }
@@ -704,13 +706,25 @@ export function adjustIndicatorTimeline(
   indicatorInterval: CandleInterval,
   candleInterval: CandleInterval,
   showOldPrediction: number[],
-): { candleIndex: number; isSignal: number; value: (number | null)[] }[] {
+  indicatorType: IndicatorType,
+): {
+  candleIndex: number;
+  isSignal: number;
+  value: (number | null)[];
+  upper?: (number | null)[];
+  lower?: (number | null)[];
+}[] {
   const targetIndicatorInterval = getMinute(indicatorInterval);
   const indicatorOffset = offset / targetIndicatorInterval;
   const targetCandleInterval = getMinute(candleInterval);
   const intervalRatio = targetIndicatorInterval / targetCandleInterval;
-
-  const result: { candleIndex: number; isSignal: number; value: (number | null)[] }[] = [];
+  const result: {
+    candleIndex: number;
+    isSignal: number;
+    value: (number | null)[];
+    upper?: (number | null)[];
+    lower?: (number | null)[];
+  }[] = [];
 
   const adjustment = Math.floor((targetIndicatorInterval - indicators[0].order) / targetCandleInterval);
 
@@ -741,6 +755,7 @@ export function adjustIndicatorTimeline(
           lastKnownValue: indicatorData.value,
           valuePredictions: indicatorData.valuePrediction.slice(indicatorIndex),
         });
+        // tslint:disable-next-line:prefer-for-of
         for (let j = 0; j < showOldPrediction.length; j++) {
           const oldIndicatorIndex = indicatorIndex - showOldPrediction[j];
           if (oldIndicatorIndex >= 0 && oldIndicatorIndex < indicators.length) {
@@ -757,24 +772,41 @@ export function adjustIndicatorTimeline(
         candleIndex: i,
         isSignal: indicatorData.calcDetail.isSignal,
         value: [indicatorData.value],
+        ...(indicatorType === IndicatorType.NWE && {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          upper: [indicatorData.calcDetail.upper],
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          lower: [indicatorData.calcDetail.lower],
+        }),
       });
     } else {
       result.push({
         candleIndex: i,
         isSignal: 0,
         value: [null],
+        ...(indicatorType === IndicatorType.NWE && {
+          upper: [null],
+          lower: [null],
+        }),
       });
     }
   }
   // NOTE: the last parameter is currently fix 20. However, it can be an external parameter.
   // What it does: how many future candly is calculated.
   const adjustedPredictions = adjustPrediction(predictionsData, adjustment, intervalRatio < 1 ? 1 : intervalRatio, 20);
+  // tslint:disable-next-line:prefer-for-of
   for (let i = 0; i < adjustedPredictions.length; i++) {
     const adjustedPrediction = adjustedPredictions[i];
     result.unshift({
       candleIndex: adjustedPrediction.candleIndex,
       isSignal: adjustedPrediction.isSignal,
       value: adjustedPrediction.value.slice(),
+      // ...(indicatorType === IndicatorType.NWE && {
+      //   upper: [null],
+      //   lower: [null],
+      // }),
     });
   }
   return result;
