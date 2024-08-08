@@ -2,10 +2,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { IndicatorCalcDetail, IndicatorType } from './indicators.constant';
 import { Timestamp } from 'bson';
+import { getConfig } from '../../shares/helpers/utils';
 
 export type IndicatorHistoryDocument = IndicatorHistory<IndicatorType> & Document;
 
-@Schema({ timestamps: true, autoIndex: false })
+@Schema({ timestamps: true, autoIndex: getConfig().get('mongodb.autoIndex') })
 export class IndicatorHistory<
   T extends IndicatorType.DEMA | IndicatorType.MAGIC | IndicatorType.NWE | IndicatorType.FREQ,
 > {

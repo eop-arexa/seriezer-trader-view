@@ -3,10 +3,11 @@ import { Document } from 'mongoose';
 import { Timestamp } from 'bson';
 import { CandleInterval } from '../candles/candles.constant';
 import { IIndicatorBase, IndicatorCalcDetail, IndicatorType } from './indicators.constant';
+import { getConfig } from '../../shares/helpers/utils';
 
 export type IndicatorDocument = Indicator<IndicatorType> & Document;
 
-@Schema({ timestamps: true, autoIndex: false })
+@Schema({ timestamps: true, autoIndex: getConfig().get('mongodb.autoIndex') })
 export class Indicator<T extends IndicatorType.DEMA | IndicatorType.MAGIC | IndicatorType.NWE | IndicatorType.FREQ> {
   @Prop()
   id: string;
