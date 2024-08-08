@@ -8,6 +8,7 @@ import * as pako from 'pako';
 import fastJson from 'fast-json-stringify';
 import { Reflector } from '@nestjs/core';
 import { COMPRESS_RESPONSE } from '../constants/constant';
+import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 
 @Injectable()
 export class MicroserviceInterceptor implements NestInterceptor {
@@ -25,7 +26,8 @@ export class MicroserviceInterceptor implements NestInterceptor {
     const request = ctx.switchToRpc().getData();
     const prefix = `${clazz.name}:${handler.name}`;
     const elapsedStart = hrtime();
-    this.logger.log({ request, elapsedStart }, `${prefix} - Request`);
+    const correlationId = randomStringGenerator();
+    this.logger.log({ request, elapsedStart, correlationId }, `${prefix} - Request`);
     const logger = this.logger;
     const isCompressResponse = this.reflector.getAllAndOverride<boolean[]>(COMPRESS_RESPONSE, [handler, clazz]);
     const stringify = fastJson({});
@@ -51,6 +53,7 @@ export class MicroserviceInterceptor implements NestInterceptor {
               request,
               response: isStringTooLong(response) ? 'SHORTENED_RESPONSE' : response,
               processTime,
+              correlationId,
             },
             `${prefix} - Response`,
           );

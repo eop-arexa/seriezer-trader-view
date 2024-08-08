@@ -80,4 +80,19 @@ export class CandlesRepository {
       )
       .exec();
   }
+
+  aggregateIndicator(symbol: TokenPair, condition: Record<any, any>, option: QueryOptions) {
+    return this.models
+      .get(symbol)
+      .find(
+        condition,
+        {
+          start: 1,
+          end: 1,
+          lastEnd: 1,
+        },
+        option,
+      )
+      .exec();
+  }
 }

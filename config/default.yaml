@@ -12,6 +12,7 @@ redis:
 mongodb:
   uri: mongodb://127.0.0.1:27017/nest-base
   debug: true
+  autoIndex: true
 nats:
   host: 127.0.0.1
   port: 4222

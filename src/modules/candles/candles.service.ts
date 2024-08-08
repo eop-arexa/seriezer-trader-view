@@ -50,6 +50,25 @@ export class CandlesService {
     );
   }
 
+  async aggregateIndicator(indexCandleFilter: IndexCandleRequestDto) {
+    return this.candleRepository.aggregateIndicator(
+      indexCandleFilter.symbol,
+      {
+        start: {
+          $gte: indexCandleFilter.startTime,
+          $lte: indexCandleFilter.endTime,
+        },
+        interval: indexCandleFilter.interval,
+      },
+      {
+        lean: true,
+        sort: {
+          start: -1,
+        },
+      },
+    );
+  }
+
   async sendLatestCandleByInterval(interval: CandleInterval) {
     const logger = this.logger;
     while (true) {

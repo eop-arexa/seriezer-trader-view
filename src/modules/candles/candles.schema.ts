@@ -2,10 +2,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { CandleInterval } from './candles.constant';
 import { Timestamp } from 'bson';
+import { getConfig } from '../../shares/helpers/utils';
 
 export type CandleDocument = Candle & Document;
 
-@Schema({ timestamps: true, autoIndex: true })
+@Schema({ timestamps: true, autoIndex: getConfig().get('mongodb.autoIndex') })
 export class Candle {
   @Prop()
   id: string;

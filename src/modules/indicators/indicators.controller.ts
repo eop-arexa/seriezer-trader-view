@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { IndicatorsService } from './indicators.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MicroserviceEvent } from '../../shares/constants/constant';
-import { IndexFREQIndicatorRequestDto, IndexIndicatorRequestDto } from './indicators.dto';
+import { IndexFREQIndicatorRequestDto, IndexIndicatorRequestDto, IndexIndicatorV2RequestDto } from './indicators.dto';
 import { CompressResponse } from '../../shares/decorators/compress-response.decorator';
 
 @Controller()
@@ -13,6 +13,12 @@ export class IndicatorsController {
   @MessagePattern(MicroserviceEvent.INDICATOR_INDEX)
   indexIndicator(@Payload() indexIndicatorFilter: IndexIndicatorRequestDto) {
     return this.indicatorsService.indexIndicator(indexIndicatorFilter);
+  }
+
+  @CompressResponse()
+  @MessagePattern(MicroserviceEvent.INDICATOR_INDEX_V2)
+  indexIndicatorV2(@Payload() indexIndicatorFilter: IndexIndicatorV2RequestDto) {
+    return this.indicatorsService.indexIndicatorV2(indexIndicatorFilter);
   }
 
   @CompressResponse()
